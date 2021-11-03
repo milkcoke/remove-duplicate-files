@@ -1,0 +1,11 @@
+{
+  "name": "remove-duplicates-image-file",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/milkcoke/remove-duplicates-image-file.git",
+  "author": "milkcoke",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.11.6"
+  }
+}
