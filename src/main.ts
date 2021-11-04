@@ -16,9 +16,9 @@ if (isMainThread) {
     // 2. hashing file and store {filename: hashed value}
     // 3. check existence duplicates and remove files from the directory
 
-    const readFileWorker = new Worker(path.join('__dirname', 'readFiles.js'));
-    // const hashFileWorker = new Worker(path.join('__dirname', 'hashFiles.js'));
-    // const removeFileWorker = new Worker(path.join('__dirname', 'removeFiles.js'));
+    const readFileWorker = new Worker(path.join(__dirname, 'readFiles.js'));
+    // const hashFileWorker = new Worker(path.join(__dirname, 'hashFiles.js'));
+    // const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.js'));
 
 
 } else {
