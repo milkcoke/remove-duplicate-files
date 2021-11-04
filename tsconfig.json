@@ -9,7 +9,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "outDir": "dist",
-    "sourceMap": true,
+//    "sourceMap": true,
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
