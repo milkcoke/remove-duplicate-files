@@ -1,12 +1,20 @@
+import util from 'util'
+import {exec} from "child_process";
 import {parentPort, workerData} from "worker_threads";
+import path from "path";
 import {File} from "./types/File";
 
-let receivedFileNumber = 0;
+// make exec call from callback function to promise(async) function
+const promiseExec = util.promisify(exec);
 
 const fileHashSet = new Set<string>();
 const duplicateFileNames : string[] = [];
+const targetPath = path.join(__dirname, '..', 'example-images');
 
+
+let receivedFileNumber = 0;
 console.log(`removeFile's workerData: ${workerData.numOfFile}`);
+
 
 parentPort.on('message', (file: File)=>{
     receivedFileNumber++;
@@ -17,6 +25,36 @@ parentPort.on('message', (file: File)=>{
         fileHashSet.add(file.value);
     }
 
-    if (receivedFileNumber >= workerData.numOfFile) console.log('Received all files!');
+    // send end signal and remove files from `rm` batch
+    // (1) child process vs fsPromise.unlink asynchronously
+    // child process 'exec' for rm batch operation
+
+    // (3) How to input specific directory path from the user ?
+    if (receivedFileNumber >= workerData.numOfFile) {
+
+        // execute multiple command using '&&' just one call!
+        // (4) can read input path of user
+
+        if (duplicateFileNames.length === 0) {
+            console.log("There is no duplicate file in your path : ", targetPath);
+            process.exit(0);
+        }
+
+        const removeFilesCommand : string = "cd " + targetPath + " && " + "rm " + duplicateFileNames.join(" ");
+        console.log('removed file command : ', removeFilesCommand);
+
+        promiseExec(removeFilesCommand)
+            .then(({stdout, stderr})=>{
+                console.log(stdout);
+                console.error(stderr);
+                process.exit(0);
+            })
+            .catch(error=>{
+                console.error(error);
+                // error occurred => You've to exit using process.exit()!
+                // parentPort.emit(error.code);
+                process.exit(error.code);
+            });
+    }
 });
 
