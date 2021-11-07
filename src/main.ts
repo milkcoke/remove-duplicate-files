@@ -17,11 +17,22 @@ if (isMainThread) {
     // 3. check existence duplicates and remove files from the directory
 
     const readFileWorker = new Worker(path.join(__dirname, 'readFiles.js'));
-    // const hashFileWorker = new Worker(path.join(__dirname, 'hashFiles.js'));
-    // const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.js'));
 
+    readFileWorker.once('exit', (exitCode: number) => {
+        readFileWorker.terminate().then(()=>{
+            switch (exitCode) {
+                case 0:
+                    console.log("All works are done successfully!");
+                    break;
+                default :
+                    console.error("error occurred!!!");
+                    console.error("exit code : ", exitCode);
+                    break;
+            }
+        });
+    });
 
 } else {
-    console.log("you are not main threads!")
+    console.log("you are not a main thread!");
     process.exit(-1);
 }

@@ -10,19 +10,20 @@ const numOfFiles : number = files.length;
 console.log(`파일 수 : ${numOfFiles}`);
 
 // 총 파일 수는 넘겨야함.
-const hashFileWorker = new Worker(path.join(__dirname, 'hashFiles.ts'), {workerData: {numOfFile: numOfFiles}});
+const hashFileWorker = new Worker(path.join(__dirname, 'hashFiles.js'), {workerData: {numOfFile: numOfFiles}});
+
+hashFileWorker.once("exit", (exitCode)=>process.exit(exitCode));
 
 try {
     // 파일을 다 읽고 넘기는게 아니라 읽을 때마다 족족 넘겨야함.
     for (const file of files) {
         readFile(path.join(filePath, file.name))
-            // 여기서 족족 넘겨야함.
-            .then((value: Buffer)=>{
-                hashFileWorker.postMessage({name: file.name, value: value});
-            })
-            .catch((reason: string)=>{
-                console.error({name: file.name, reason: reason});
-            });
+                                                .then((value: Buffer)=>{
+                                                    hashFileWorker.postMessage({name: file.name, value: value});
+                                                })
+                                                .catch((reason: string)=>{
+                                                    console.error({name: file.name, reason: reason});
+                                                });
     }
 } catch (error) {
     console.error(error)

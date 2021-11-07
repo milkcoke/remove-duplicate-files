@@ -11,15 +11,13 @@ import path from "path";
 // ]
 
 // you should pass 'workerData' in constructor even though parentThread already had it.
-const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.ts'), {workerData: {numOfFile: workerData.numOfFile}});
+const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.js'), {workerData: {numOfFile: workerData.numOfFile}});
+removeFileWorker.once('exit', (exitCode)=>process.exit(exitCode));
 
 parentPort.on('message', (fileObj: any)=>{
     const hashGenerator = createHash('MD5');
     hashGenerator.update(fileObj.value);
     const hashedValue : string = hashGenerator.digest('hex');
-
-    console.log(fileObj.name);
-    console.log(hashedValue);
 
     removeFileWorker.postMessage({name: fileObj.name, value: hashedValue});
 });
