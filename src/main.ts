@@ -5,6 +5,7 @@
 
 import {Worker, isMainThread} from 'worker_threads'
 import path from "path";
+import {lstatSync} from "fs"
 
 if (isMainThread) {
     // 4 workers
@@ -16,7 +17,16 @@ if (isMainThread) {
     // 2. hashing file and store {filename: hashed value}
     // 3. check existence duplicates and remove files from the directory
 
-    const readFileWorker = new Worker(path.join(__dirname, 'readFiles.js'));
+    if (process.argv.length !== 3) {
+        console.error("EIO: Invalid usage");
+        process.exit(5);
+    } else if (lstatSync(process.argv[2]).isDirectory() === false) {
+        // ENOTDIR || ENOENT
+        console.error("ENOTDIR : Invalid directory");
+        process.exit(5);
+    }
+
+    const readFileWorker = new Worker(path.join(__dirname, 'readFiles.js'), {workerData: {dirPath: process.argv[2]}});
 
     readFileWorker.once('exit', (exitCode: number) => {
         readFileWorker.terminate().then(()=>{

@@ -9,12 +9,9 @@ const promiseExec = util.promisify(exec);
 
 const fileHashSet = new Set<string>();
 const duplicateFileNames : string[] = [];
-const targetPath = path.join(__dirname, '..', 'example-images');
-
+const targetPath = workerData.dirPath;
 
 let receivedFileNumber = 0;
-console.log(`removeFile's workerData: ${workerData.numOfFile}`);
-
 
 parentPort.on('message', (file: File)=>{
     receivedFileNumber++;

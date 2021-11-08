@@ -11,7 +11,7 @@ import path from "path";
 // ]
 
 // you should pass 'workerData' in constructor even though parentThread already had it.
-const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.js'), {workerData: {numOfFile: workerData.numOfFile}});
+const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.js'), {workerData: workerData});
 removeFileWorker.once('exit', (exitCode)=>process.exit(exitCode));
 
 parentPort.on('message', (fileObj: any)=>{
