@@ -9,13 +9,13 @@ const files = readdirSync(targetDir, {encoding : 'utf-8', withFileTypes: true});
 const numOfFiles : number = files.length;
 console.log(`파일 수 : ${numOfFiles}`);
 
-// 총 파일 수는 넘겨야함.
+// Pass the number of all files
 const hashFileWorker = new Worker(path.join(__dirname, 'hashFiles.js'), {workerData: {numOfFile: numOfFiles, dirPath: targetDir}});
 
 hashFileWorker.once("exit", (exitCode)=>process.exit(exitCode));
 
 try {
-    // 파일을 다 읽고 넘기는게 아니라 읽을 때마다 족족 넘겨야함.
+    // pass file name and byte stream whenever this thread reads each file asynchronously
     for (const file of files) {
         readFile(path.join(targetDir, file.name))
                                                 .then((value: Buffer)=>{

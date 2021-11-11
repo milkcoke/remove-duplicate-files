@@ -1,7 +1,6 @@
 import {parentPort, Worker, workerData} from "worker_threads";
 import {createHash} from "crypto";
 import path from "path";
-// Hash class is a utility for creating hash digests of data.
 
 // The hashFile thread should keep and share the file list object with removeFiles thread
 // [
