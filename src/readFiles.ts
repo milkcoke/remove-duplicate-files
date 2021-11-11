@@ -5,7 +5,9 @@ import {readdirSync} from "fs";
 
 // 2. hashing file and store {filename: hashed value}
 const targetDir = workerData.dirPath;
-const files = readdirSync(targetDir, {encoding : 'utf-8', withFileTypes: true});
+const allResources = readdirSync(targetDir, {encoding : 'utf-8', withFileTypes: true});
+const files = allResources.filter(resource=>resource.isFile());
+
 const numOfFiles : number = files.length;
 console.log(`파일 수 : ${numOfFiles}`);
 
