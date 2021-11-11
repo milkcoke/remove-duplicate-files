@@ -16,7 +16,7 @@ Remove duplicate files by inputting directory path
 $ npm run build
 $ cd dist
 ```
-#### (2) Copy path of directory where duplicates file exist
+#### (2) Copy the path of directory where duplicate files exist
 #### (3) Execute command below
 ```bash
 $ node main.js [your-directory-path]
