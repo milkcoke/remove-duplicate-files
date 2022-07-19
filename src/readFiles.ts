@@ -17,7 +17,7 @@ const hashFileWorker = new Worker(path.join(__dirname, 'hashFiles.js'), {workerD
 hashFileWorker.once("exit", (exitCode)=>process.exit(exitCode));
 
 try {
-    // pass file name and byte stream whenever this thread reads each file asynchronously
+    // Pass file name and byte stream whenever this thread reads each file asynchronously
     for (const file of files) {
         readFile(path.join(targetDir, file.name))
                                                 .then((value: Buffer)=>{
