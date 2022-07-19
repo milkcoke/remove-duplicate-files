@@ -1,10 +1,7 @@
-import util from 'util'
-import {exec} from "child_process";
 import {parentPort, workerData} from "worker_threads";
+import {rm} from 'fs/promises';
 import {File} from "./types/File";
-
-// make exec call from callback function to promise(async) function
-const promiseExec = util.promisify(exec);
+import path from "path";
 
 const fileHashSet = new Set<string>();
 const duplicateFileNames : string[] = [];
@@ -12,7 +9,7 @@ const targetPath = workerData.dirPath;
 
 let receivedFileNumber = 0;
 
-parentPort.on('message', (file: File)=>{
+parentPort.on('message', async (file: File)=>{
     receivedFileNumber++;
 
     if (fileHashSet.has(file.value)) {
@@ -28,19 +25,26 @@ parentPort.on('message', (file: File)=>{
             process.exit(0);
         }
 
-        const removeFilesCommand : string = "cd " + targetPath + " && " + "rm " + duplicateFileNames.join(" ");
+        try {
+            await Promise.all(
+                duplicateFileNames.map(duplicateFileName=> {
+                    const removePromise = rm(path.join(targetPath, duplicateFileName));
+                    console.log(duplicateFileName + ' is removing..');
+                    return removePromise;
+                })
+            );
 
-        promiseExec(removeFilesCommand)
-            .then(({stdout, stderr})=>{
-                console.log(stdout);
-                console.error(stderr);
-                process.exit(0);
-            })
-            .catch(error=>{
-                console.error(error);
-                // error occurred => You've to exit using process.exit()!
+            console.log('All duplicate files are removed!');
+            process.exit(0);
+
+        } catch(err: unknown) {
+            if (err instanceof Error) {
+                console.error(err);
                 process.exit(error.code);
-            });
+            }
+        }
+
+
     }
 });
 
