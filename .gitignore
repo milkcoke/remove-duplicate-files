@@ -2,3 +2,12 @@
 node_modules
 dist
 dump
+
+# Apply yarn berry with PnP mode
+.yarn/*
+#!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

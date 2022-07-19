@@ -5,11 +5,12 @@
   "repository": "https://github.com/milkcoke/remove-duplicates-image-file.git",
   "author": "milkcoke",
   "license": "MIT",
+  "packageManager": "yarn@3.2.1",
   "scripts": {
-    "build": "tsc -p ."
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js example-images"
   },
   "devDependencies": {
-    "@types/node": "^16.11.6",
-    "ts-node-dev": "^1.1.8"
+    "@types/node": "^18.0.6"
   }
 }
