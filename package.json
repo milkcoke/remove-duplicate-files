@@ -11,6 +11,7 @@
     "start": "node dist/main.js example-images"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17"
+    "@types/node": "^20.11.17",
+    "typescript": "^5.3.3"
   }
 }
