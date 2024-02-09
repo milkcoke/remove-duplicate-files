@@ -1,0 +1,102 @@
+env:
+    commonjs: true
+    es6: true
+    node: true
+    jest: true
+extends:
+    - 'eslint:recommended'
+    - 'plugin:@typescript-eslint/eslint-recommended'
+globals:
+    Atomics: readonly
+    SharedArrayBuffer: readonly
+    NodeJS: true
+parser: '@typescript-eslint/parser'
+plugins:
+    - '@typescript-eslint'
+parserOptions:
+    ecmaVersion: 2023
+    sourceType: module
+rules:
+    indent:
+    # 들여쓰기 2칸
+        - error
+        - 2
+        - SwitchCase: 1
+    linebreak-style:
+        - error
+        - unix
+    no-case-declarations:
+        - off
+    no-undef:
+        - error
+    no-useless-escape:
+        - off
+    no-unused-vars:
+        - off
+    keyword-spacing: warn
+    comma-spacing: warn
+    space-infix-ops: warn
+    block-spacing: warn
+    dot-location: warn
+    func-call-spacing: warn
+    key-spacing: warn
+    no-multi-spaces: warn
+    no-return-assign: warn
+    no-unsafe-negation: warn
+    space-before-blocks: warn
+    space-in-parens: warn
+    spaced-comment: warn
+    template-curly-spacing: warn
+    comma-dangle:
+        - error
+        - objects: never
+          arrays: never
+          imports: never
+          exports: never
+          functions: never
+    object-curly-spacing:
+        - error
+        - never
+    quotes:
+        - error
+        - single
+    semi:
+        - error
+        - never
+    "@typescript-eslint/explicit-function-return-type": error
+    "@typescript-eslint/no-explicit-any": warn
+    "@typescript-eslint/naming-convention":
+      - error
+      - selector:
+          - classProperty
+          - classMethod
+          - parameterProperty
+        modifiers:
+          - private
+        format:
+          - camelCase
+        leadingUnderscore: require
+      - selector:
+          - classProperty
+          - classMethod
+          - parameterProperty
+        modifiers:
+          - protected
+        format:
+          - camelCase
+        leadingUnderscore: require
+      - selector:
+          - interface
+        format:
+          - PascalCase
+        custom:
+            regex: ^I[A-Z]
+            match: true
+      - selector:
+          - typeAlias
+        format:
+          - PascalCase
+        leadingUnderscore: forbid
+        custom:
+            regex: ^(T|I)[A-Z]
+            match: true
