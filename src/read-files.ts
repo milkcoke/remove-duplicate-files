@@ -16,7 +16,7 @@ console.log(`파일 수 : ${numOfFiles}`)
 
 // Pass the number of all files
 const hashFileWorker = new Worker(
-  path.join(__dirname, 'hashFiles.js'), {
+  path.join(__dirname, 'hash-files.js'), {
     workerData: {
       numOfFile: numOfFiles,
       dirPath: targetDir

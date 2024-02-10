@@ -18,7 +18,7 @@ if (isMainThread) {
   // 1. Read file byte stream from the directory
   // 2. hashing file and store {filename: hashed value}
   // 3. check existence duplicates and remove files from the directory
-  const readFileWorker = new Worker(path.join(__dirname, 'readFiles.js'), {
+  const readFileWorker = new Worker(path.join(__dirname, 'read-files.js'), {
     workerData: {
       dirPath: process.argv[2]}
   })

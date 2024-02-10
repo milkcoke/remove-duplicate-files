@@ -12,7 +12,7 @@ import {IFile} from './types/File'
 // ]
 
 // you should pass 'workerData' in constructor even though parentThread already had it.
-const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.js'), {
+const removeFileWorker = new Worker(path.join(__dirname, 'remove-files.js'), {
   workerData: workerData
 })
 
