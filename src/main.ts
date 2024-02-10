@@ -6,7 +6,6 @@ import {lstatSync} from 'fs'
 // 4 workers
 // main threads just monit!
 if (isMainThread) {
-
   if (process.argv.length !== 3) {
     console.error('EIO: Invalid usage')
     process.exit(5)
@@ -19,7 +18,10 @@ if (isMainThread) {
   // 1. Read file byte stream from the directory
   // 2. hashing file and store {filename: hashed value}
   // 3. check existence duplicates and remove files from the directory
-  const readFileWorker = new Worker(path.join(__dirname, 'readFiles.js'), {workerData: {dirPath: process.argv[2]}})
+  const readFileWorker = new Worker(path.join(__dirname, 'readFiles.js'), {
+    workerData: {
+      dirPath: process.argv[2]}
+  })
 
   readFileWorker.once('exit', async (exitCode: number) => {
     await readFileWorker.terminate()

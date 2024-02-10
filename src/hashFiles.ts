@@ -2,6 +2,7 @@ import {parentPort, Worker, workerData} from 'worker_threads'
 import {createHash} from 'crypto'
 import path from 'path'
 import process from 'process'
+import {IFile} from './types/File'
 
 // The hashFile thread should keep and share the file list object with removeFiles thread
 // [
@@ -11,14 +12,23 @@ import process from 'process'
 // ]
 
 // you should pass 'workerData' in constructor even though parentThread already had it.
-const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.js'), {workerData: workerData})
-removeFileWorker.once('exit', (exitCode)=>process.exit(exitCode))
+const removeFileWorker = new Worker(path.join(__dirname, 'removeFiles.js'), {
+  workerData: workerData
+})
 
-parentPort.on('message', (fileObj: any)=>{
+removeFileWorker.once('exit', (exitCode)=>{
+  process.exit(exitCode)
+})
+
+parentPort.on('message', (file: IFile)=>{
   const hashGenerator = createHash('MD5')
-  hashGenerator.update(fileObj.value)
+
+  hashGenerator.update(file.value)
   const hashedValue : string = hashGenerator.digest('hex')
 
-  removeFileWorker.postMessage({name: fileObj.name, value: hashedValue})
+  removeFileWorker.postMessage({
+    name: file.name,
+    value: hashedValue
+  })
 })
 

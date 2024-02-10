@@ -29,9 +29,8 @@ parentPort.on('message', async (file: IFile)=>{
     try {
       await Promise.all(
         duplicateFileNames.map(duplicateFileName=> {
-          const removePromise = rm(path.join(targetPath, duplicateFileName))
           console.log(duplicateFileName + ' is removing..')
-          return removePromise
+          return rm(path.join(targetPath, duplicateFileName))
         })
       )
 
