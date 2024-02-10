@@ -13,38 +13,33 @@ let receivedFileNumber = 0
 parentPort.on('message', async (file: IFile)=>{
   receivedFileNumber++
 
-  if (fileHashSet.has(file.value)) {
-    duplicateFileNames.push(file.name)
-  } else {
-    fileHashSet.add(file.value)
+  if (fileHashSet.has(file.value)) duplicateFileNames.push(file.name)
+  else fileHashSet.add(file.value)
+
+  if (receivedFileNumber < workerData.numOfFile) return
+
+  if (duplicateFileNames.length === 0) {
+    console.log('There is no duplicate file in your path : ', targetPath)
+    process.exit(0)
   }
 
-  if (receivedFileNumber >= workerData.numOfFile) {
+  try {
+    await Promise.all(
+      duplicateFileNames.map(duplicateFileName=> {
+        console.log(duplicateFileName + ' is removing..')
+        return rm(path.join(targetPath, duplicateFileName))
+      })
+    )
 
-    if (duplicateFileNames.length === 0) {
-      console.log('There is no duplicate file in your path : ', targetPath)
-      process.exit(0)
+    console.log('All duplicate files are removed!')
+    process.exit(0)
+
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err)
+      process.exit(error.code)
     }
-
-    try {
-      await Promise.all(
-        duplicateFileNames.map(duplicateFileName=> {
-          console.log(duplicateFileName + ' is removing..')
-          return rm(path.join(targetPath, duplicateFileName))
-        })
-      )
-
-      console.log('All duplicate files are removed!')
-      process.exit(0)
-
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error(err)
-        process.exit(error.code)
-      }
-    }
-
-
   }
+
 })
 
