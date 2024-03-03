@@ -20,11 +20,10 @@ removeFileWorker.once('exit', (exitCode)=>{
   process.exit(exitCode)
 })
 
-parentPort.on('message', (file: IFile)=>{
-  const hashGenerator = createHash('MD5')
-
-  hashGenerator.update(file.value)
-  const hashedValue : string = hashGenerator.digest('hex')
+parentPort?.on('message', (file: IFile)=>{
+  const hashedValue = createHash('MD5')
+    .update(file.value)
+    .digest('hex')
 
   removeFileWorker.postMessage({
     name: file.name,
